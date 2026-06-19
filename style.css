@@ -1,0 +1,766 @@
+/* ===================================================================
+   ARIFUL ISLAM — PREMIUM PORTFOLIO
+   Dark Theme · Glassmorphism · Developer + Digital Marketer Brand
+   =================================================================== */
+
+/* -------------------------------------------------------------
+   1. DESIGN TOKENS
+   ------------------------------------------------------------- */
+:root {
+  /* Surface */
+  --bg-void:        #090c14;
+  --bg-base:        #0b0f1d;
+  --bg-elevated:    #11162a;
+  --glass:          rgba(255, 255, 255, 0.045);
+  --glass-strong:   rgba(255, 255, 255, 0.07);
+  --glass-border:   rgba(255, 255, 255, 0.09);
+  --glass-border-hi: rgba(255, 255, 255, 0.18);
+
+  /* Brand gradient — indigo (code) → cyan (data/SEO) */
+  --grad-1: #6366f1;
+  --grad-2: #22d3ee;
+  --grad-3: #a78bfa;
+  --gradient-main: linear-gradient(120deg, var(--grad-1) 0%, var(--grad-3) 50%, var(--grad-2) 100%);
+  --gradient-soft: linear-gradient(120deg, rgba(99,102,241,0.18) 0%, rgba(34,211,238,0.18) 100%);
+
+  /* Warm accent — marketing / CTA energy, keeps it from feeling purely "cold tech" */
+  --gold: #f0b429;
+  --gold-soft: rgba(240, 180, 41, 0.14);
+
+  /* Text */
+  --text-hi:    #f3f5fb;
+  --text-mid:   #aab2c8;
+  --text-low:   #6b7390;
+
+  /* Semantic skill colors (progress rings, tags) */
+  --c-html:  #f0b429;
+  --c-js:    #22d3ee;
+  --c-php:   #34d399;
+  --c-react: #a78bfa;
+
+  /* Radii / shadow / motion */
+  --r-sm: 10px;
+  --r-md: 18px;
+  --r-lg: 28px;
+  --r-pill: 999px;
+
+  --shadow-glow:  0 8px 40px rgba(99, 102, 241, 0.18);
+  --shadow-card:  0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lift:  0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--glass-border-hi);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.4s;
+}
+
+/* -------------------------------------------------------------
+   2. RESET & BASE
+   ------------------------------------------------------------- */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-mid);
+  font-family: 'Inter', 'Josefin Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ambient backdrop: soft grid + glow orbs, fixed so it doesn't repeat-scroll oddly */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(99,102,241,0.16), transparent 45%),
+    radial-gradient(circle at 85% 28%, rgba(34,211,238,0.12), transparent 45%),
+    radial-gradient(circle at 30% 85%, rgba(167,139,250,0.10), transparent 40%),
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: auto, auto, auto, 48px 48px, 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+h1, h2, h3, h4, h5, .navbar-brand, .heading h3 {
+  font-family: 'Space Grotesk', 'Josefin Sans', sans-serif;
+  color: var(--text-hi);
+  letter-spacing: -0.01em;
+}
+
+p { color: var(--text-mid); }
+.text-muted { color: var(--text-mid) !important; }
+
+a { color: inherit; }
+
+::selection { background: var(--grad-1); color: #fff; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--grad-1), var(--grad-2));
+  border-radius: var(--r-pill);
+}
+
+/* Visible keyboard focus, kept consistent everywhere */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--grad-2);
+  outline-offset: 3px;
+}
+
+section { position: relative; z-index: 1; }
+
+/* -------------------------------------------------------------
+   3. SHARED HEADING / EYEBROW SYSTEM
+   ------------------------------------------------------------- */
+.heading { margin-bottom: 8px; }
+
+.heading small {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--grad-2);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  padding: 7px 16px;
+  border-radius: var(--r-pill);
+  margin-bottom: 16px;
+}
+
+.heading small::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.heading h3 {
+  font-size: clamp(1.7rem, 3.2vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* -------------------------------------------------------------
+   4. GLASS CARD PRIMITIVE (reused across services/skills/portfolio/blog)
+   ------------------------------------------------------------- */
+.glass-surface,
+.service-card,
+.progress-card,
+.portfolio .card,
+.blog-card,
+.blog .card,
+.contact-form,
+.modal-content {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+
+/* -------------------------------------------------------------
+   5. NAVBAR
+   ------------------------------------------------------------- */
+#navbar-top {
+  background: rgba(9, 12, 20, 0.7) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 16px 0;
+}
+
+#navbar-top .navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem !important;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent !important;
+}
+
+.nav-link {
+  color: var(--text-mid) !important;
+  font-weight: 500;
+  font-size: 0.95rem !important;
+  position: relative;
+  padding: 8px 4px !important;
+  transition: color var(--dur) var(--ease);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  bottom: 2px;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-main);
+  border-radius: var(--r-pill);
+  transition: width var(--dur) var(--ease);
+}
+
+.nav-link:hover {
+  color: var(--text-hi) !important;
+}
+.nav-link:hover::after { width: calc(100% - 8px); }
+
+.nav-menu {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  color: var(--text-hi);
+  padding: 8px 12px;
+}
+
+/* -------------------------------------------------------------
+   6. BUTTONS
+   ------------------------------------------------------------- */
+.c-btn {
+  background: var(--gradient-main);
+  border: none;
+  color: #0a0e1a !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+}
+
+.c-btn a { color: #0a0e1a !important; text-decoration: none; }
+
+.c-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+  z-index: -1;
+}
+
+.c-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(240, 180, 41, 0.4);
+  color: #0a0e1a;
+}
+
+.c-btn:hover::before { opacity: 1; }
+
+/* Secondary text link with arrow */
+.link {
+  color: var(--grad-2);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.link::after { content: '→'; transition: transform var(--dur) var(--ease); }
+.link:hover { color: var(--gold); gap: 10px; }
+.link:hover::after { transform: translateX(2px); }
+
+/* Filter pills (portfolio) */
+.filter-item {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text-mid);
+  padding: 9px 22px;
+  border-radius: var(--r-pill);
+  margin: 6px;
+  font-weight: 500;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: all var(--dur) var(--ease);
+}
+
+.filter-item:hover,
+.filter-item.active {
+  background: var(--gradient-main);
+  color: #0a0e1a;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(99,102,241,0.35);
+}
+
+/* Circular icon buttons (social, modal close) */
+.social-links button,
+.btn-c {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass);
+  color: var(--text-hi);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  transition: all var(--dur) var(--ease);
+}
+.social-links { display: flex; gap: 10px; }
+
+.social-links .dribble:hover { background: #ea4c89; border-color: #ea4c89; transform: translateY(-3px); }
+.social-links .whatsapp:hover { background: #25d366; border-color: #25d366; transform: translateY(-3px); }
+.social-links .behance:hover { background: #1769ff; border-color: #1769ff; transform: translateY(-3px); }
+
+.btn-c { margin-left: auto; }
+.btn-c:hover { background: var(--gradient-main); color: #0a0e1a; transform: rotate(90deg); }
+
+/* -------------------------------------------------------------
+   7. HERO — signature element: glass "terminal" card + role rotator
+   ------------------------------------------------------------- */
+.home {
+  min-height: calc(100vh - 76px);
+  display: flex;
+  align-items: center;
+  padding-top: 40px !important;
+  padding-bottom: 40px !important;
+}
+
+.home h2 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--text-hi) !important;
+}
+
+.c-orange {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--grad-2);
+}
+
+.home p.text-muted {
+  max-width: 520px;
+  font-size: 1.02rem;
+  margin-top: 18px;
+}
+
+/* role rotator, injected via small JS line — see HTML notes */
+.role-rotator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 1.05rem;
+  color: var(--grad-2);
+  margin-bottom: 14px;
+}
+.role-rotator .cursor {
+  width: 2px;
+  height: 1.1em;
+  background: var(--gold);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Hero visual: glass terminal frame around the existing banner image */
+.home .col-10.col-md-4 {
+  position: relative;
+}
+
+.home .col-10.col-md-4::before {
+  content: '● ● ●';
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  letter-spacing: 6px;
+  color: var(--text-low);
+  font-size: 0.7rem;
+}
+
+.home .col-10.col-md-4 img {
+  border-radius: var(--r-lg);
+  border: 1px solid var(--glass-border-hi);
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  padding: 14px;
+  box-shadow: var(--shadow-glow), 0 30px 60px rgba(0,0,0,0.45);
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+/* -------------------------------------------------------------
+   8. EXPERTISE / SERVICE CARDS
+   ------------------------------------------------------------- */
+.expertise { padding: 90px 0 50px; }
+
+.service-card {
+  padding: 38px 30px;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--r-md);
+  background: var(--gradient-main);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  border-color: transparent;
+  box-shadow: var(--shadow-lift);
+}
+
+.service-card:hover::after { opacity: 0.5; }
+
+.service-card .img {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-sm);
+  background: var(--gradient-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.service-card .img img {
+  width: 28px !important;
+  filter: brightness(0) saturate(100%) invert(1);
+  opacity: 0.9;
+}
+
+.service-card h4 {
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+
+/* -------------------------------------------------------------
+   9. SKILLS — glowing conic progress rings on glass cards
+   ------------------------------------------------------------- */
+.skill { padding: 70px 0; }
+
+.progress-card {
+  text-align: center;
+  padding: 30px 18px;
+}
+
+.progress-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--glass-border-hi);
+}
+
+.circular-progress {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(var(--grad-1) 0deg, rgba(255,255,255,0.08) 0deg);
+  transition: background 1.6s var(--ease);
+}
+
+.circular-progress::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+}
+
+.circular-progress.html-css { background: conic-gradient(var(--c-html) 0deg, rgba(255,255,255,0.08) 0deg); }
+.circular-progress.javascript { background: conic-gradient(var(--c-js) 0deg, rgba(255,255,255,0.08) 0deg); }
+.circular-progress.php { background: conic-gradient(var(--c-php) 0deg, rgba(255,255,255,0.08) 0deg); }
+.circular-progress.reactjs { background: conic-gradient(var(--c-react) 0deg, rgba(255,255,255,0.08) 0deg); }
+
+.progress-value {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-hi);
+}
+
+.progress-card .text {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+.skill-detail .heading p { margin: 16px 0 8px; max-width: 540px; }
+
+/* -------------------------------------------------------------
+   10. PORTFOLIO
+   ------------------------------------------------------------- */
+.portfolio { padding-bottom: 60px; }
+
+.portfolio .card,
+.blog .card {
+  overflow: hidden;
+}
+
+.portfolio .card-img-top {
+  height: 200px;
+  object-fit: cover;
+  filter: saturate(0.9) brightness(0.92);
+  transition: transform var(--dur) var(--ease), filter var(--dur) var(--ease);
+}
+
+.portfolio .card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--glass-border-hi);
+}
+
+.portfolio .card:hover .card-img-top {
+  transform: scale(1.06);
+  filter: saturate(1) brightness(1);
+}
+
+.portfolio .card-body { padding: 22px; }
+.portfolio .card-title { font-size: 1rem; margin-bottom: 12px; }
+
+.badge {
+  background: var(--gradient-soft) !important;
+  color: var(--grad-2) !important;
+  border: 1px solid var(--glass-border);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  margin: 2px;
+}
+
+/* -------------------------------------------------------------
+   11. TESTIMONIALS
+   ------------------------------------------------------------- */
+.testimonial { padding: 80px 0; }
+
+.testimonial .bi-quote {
+  font-size: 2.4rem;
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+.testimonial h4 {
+  margin-top: 14px;
+  font-size: 1.05rem;
+}
+
+.testimonial small.text-muted {
+  color: var(--text-low) !important;
+}
+
+.testimonial img.img-fluid {
+  border-radius: var(--r-lg);
+  border: 1px solid var(--glass-border);
+}
+
+.nextprev-btn {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text-hi);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  margin-right: 8px;
+  transition: all var(--dur) var(--ease);
+}
+.nextprev-btn:hover {
+  background: var(--gradient-main);
+  color: #0a0e1a;
+}
+.nextprev-btn i { font-size: 1.2rem; }
+
+/* -------------------------------------------------------------
+   12. BLOG
+   ------------------------------------------------------------- */
+.blog { padding: 70px 0; }
+
+.blog .card-img-top {
+  height: 190px;
+  object-fit: cover;
+}
+
+.blog .card-body { padding: 22px; }
+
+.blog small { color: var(--gold); font-weight: 600; font-size: 0.78rem; }
+.blog span { color: var(--text-low); font-size: 0.82rem; }
+
+.blog .card-title a {
+  text-decoration: none;
+  color: var(--text-hi);
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: color var(--dur) var(--ease);
+}
+.blog .card-title a:hover { color: var(--grad-2); }
+
+.blog .card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* -------------------------------------------------------------
+   13. MODALS
+   ------------------------------------------------------------- */
+.modal-content {
+  background: var(--bg-elevated);
+  border: 1px solid var(--glass-border-hi);
+  box-shadow: var(--shadow-lift);
+}
+
+.modal-body img { border-radius: var(--r-sm); }
+.modal-body h4 { color: var(--text-hi); }
+
+/* -------------------------------------------------------------
+   14. CONTACT
+   ------------------------------------------------------------- */
+.contact { padding: 90px 0; }
+
+.contact-details p { color: var(--text-mid); margin-bottom: 2px; }
+.contact-details .bi {
+  color: var(--grad-2);
+  font-size: 1.1rem;
+}
+
+.contact-form { padding: 32px; }
+
+.contact-form .form-control {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass-border);
+  color: var(--text-hi);
+  border-radius: var(--r-sm);
+  padding: 13px 16px;
+  font-size: 0.95rem;
+  transition: all var(--dur) var(--ease);
+}
+
+.contact-form .form-control::placeholder { color: var(--text-low); }
+
+.contact-form .form-control:focus {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--grad-2);
+  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.12);
+  outline: none;
+  color: var(--text-hi);
+}
+
+/* -------------------------------------------------------------
+   15. BACK TO TOP
+   ------------------------------------------------------------- */
+#btn-back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-main);
+  color: #0a0e1a;
+  border: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-glow);
+  transition: transform var(--dur) var(--ease);
+  z-index: 999;
+}
+#btn-back-to-top:hover { transform: translateY(-4px) scale(1.05); }
+
+/* -------------------------------------------------------------
+   16. FOOTER
+   ------------------------------------------------------------- */
+footer {
+  background: var(--bg-void);
+  border-top: 1px solid var(--glass-border);
+  padding: 50px 0 30px !important;
+}
+
+footer h3 {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.link-group a {
+  color: var(--text-mid);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color var(--dur) var(--ease);
+}
+.link-group a:hover { color: var(--grad-2); }
+.link-group .vr { background: var(--glass-border); }
+
+footer p { color: var(--text-low); font-size: 0.85rem; }
+
+/* -------------------------------------------------------------
+   17. SCROLL-REVEAL SUPPORT (works with existing AOS attributes)
+   ------------------------------------------------------------- */
+[data-aos] { transition-timing-function: var(--ease) !important; }
+
+/* -------------------------------------------------------------
+   18. RESPONSIVE
+   ------------------------------------------------------------- */
+@media (max-width: 991px) {
+  .home { text-align: center; }
+  .home .col-10.col-md-4::before { display: none; }
+}
+
+@media (max-width: 768px) {
+  .home h2 { font-size: 2rem; }
+  .heading h3 { font-size: 1.5rem; }
+  .expertise { padding: 60px 0 30px; }
+  .skill, .testimonial, .blog { padding: 50px 0; }
+  .contact { padding: 60px 0; }
+  .service-card { margin-bottom: 18px; }
+  .circular-progress { width: 92px; height: 92px; }
+  #btn-back-to-top { width: 42px; height: 42px; bottom: 18px; right: 18px; }
+}
+
+@media (max-width: 480px) {
+  .home h2 { font-size: 1.7rem; }
+  .contact-form { padding: 22px; }
+}
+
+/* -------------------------------------------------------------
+   19. REDUCED MOTION
+   ------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
